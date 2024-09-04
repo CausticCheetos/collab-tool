@@ -1,0 +1,36 @@
+.taskCard{
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    border-style: solid;
+    border-radius: 12px;
+}
+.taskCard > h3{
+    margin: 0;
+}
+.taskCard > h4{
+    margin: 0;
+}
+.taskDetails{
+    display: flex;
+    flex-direction: column;
+    font-size: 80%;
+}
+.userList{
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+.userIcon{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+.userIcon > label{
+    font-size: 70%;
+}
+
+.comments{
+    list-style-type: none;
+    padding: 0;
+}
