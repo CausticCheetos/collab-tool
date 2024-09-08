@@ -1,0 +1,19 @@
+.userTask{
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+}
+h3{
+    margin: 0 !important;
+}
+
+.userTask>strong{
+    font-size: 0.8em;
+}
+
+.comments>*:not(:last-child) {
+    border-bottom: solid;
+    padding-bottom: 15px;
+    border-width: 1px;
+  }

@@ -1,5 +1,5 @@
 import './Group.css'
-import Comments from  './Comments.tsx'
+import Tasks from './Task.tsx';
 import groupService from '../services/groups.tsx'
 import { useEffect, useState } from 'react';
 
@@ -36,7 +36,7 @@ interface ITask {
 const Group = ({id, name, groupID}: GroupProps) => {
     const [tasks, setTask] = useState<ITask[]>([]);
     const [userList, setUserList] = useState<UsersProps[]>([]);
-    const [comments, setComments] = useState<IComments[]>([]);
+    //const [comments, setComments] = useState<IComments[]>([]);
     
     useEffect(() => {
         groupService
@@ -48,36 +48,37 @@ const Group = ({id, name, groupID}: GroupProps) => {
 
         groupService
         .getGroupTask(groupID)
-        .then((response) =>{
+        .then(async (response) =>{
             console.log(response.data);
             const taskList = response.data.map((val: ITask) =>{
                 return val.task_id
             })
             console.log(taskList.toString());
 
+            let results = response.data;
             groupService
             .getAllComments(taskList.toString())
             .then((response) =>{
                 console.log(response.data);
-                setComments(response.data);
-            })
-            
-            let results = response.data;
-            results = results.map((value: ITask) =>{
-                value["comments"] = [];
-                comments.forEach((element) =>{
-                    if(element.task_id == value['task_id']){
-                        value["comments"].push(element);
-                    }
+                //setComments(response.data);
+                const test = response.data;
+                results = results.map((value: ITask) =>{
+                    value["comments"] = [];
+                    test.forEach((element: IComments) =>{
+                        if(element.task_id == value['task_id']){
+                            value["comments"].push(element);
+                        }
+                    });
+                    return value;
                 });
-                return value;
-            });
-
-            console.log(results);
+                console.log(results);
             
-            setTask(results);
+                setTask(results);
+            })
         })
-      }, [comments, groupID])
+      }, [groupID])
+
+      
 
     /* const tasks = [
         {
@@ -164,47 +165,9 @@ const Group = ({id, name, groupID}: GroupProps) => {
                 
                 {tasks.map((task) => {
                     if(task.user_id == id && task.group_id == groupID){
-                        const date = new Date(task.date.replace(' ', 'T'));
-                        const dateString = date.toDateString();
-                        const dateTime = date.toLocaleTimeString();
                         return(
-                            <div className='taskCard'>
-                                <h3>
-                                    {task.task_name}
-                                </h3>
-                                <div className='taskDetails'>
-                                    <span>
-                                        Created on {dateString} - {dateTime}
-                                    </span>
-                                    <span>
-                                        TaskID {task.task_id}
-                                    </span>
-                                </div>
-                                <h4>
-                                    Description
-                                </h4>
-                                <p>
-                                    {task.description}
-                                </p>
-                                <div>
-                                    Comments:
-                                    <hr/>
-                                    <ul className='comments'>
-                                    {task.comments.map(comment =>
-                                        {return(
-                                            <li>
-                                                <Comments 
-                                                    userID={comment.user_id} 
-                                                    contents={comment.comment}
-                                                    date={comment.date}
-                                                    />
-                                            </li>
-                                        )}
-                                    )}
-                                    </ul>
-                                </div>
-                            </div>   
-                           )
+                            <Tasks task={task} userList={userList}/>
+                        )
                     }
                 })}
                 {(()=>{
@@ -219,50 +182,11 @@ const Group = ({id, name, groupID}: GroupProps) => {
                 Others
                 {tasks.map((task) => {
                     if(task.user_id != id && task.group_id == groupID){
-                        const date = new Date(task.date.replace(' ', 'T'));
-                        const dateString = date.toDateString();
-                        const dateTime = date.toLocaleTimeString();
                         return(
-                            <div className='taskCard'>
-                                <h3>
-                                    {task.task_name}
-                                </h3>
-                                <div className='taskDetails'>
-                                    <span>
-                                        Created on {dateString} - {dateTime}
-                                    </span>
-                                    <span>
-                                        TaskID {task.task_id}
-                                    </span>
-                                </div>
-                                <h4>
-                                    Description
-                                </h4>
-                                <p>
-                                    {task.description}
-                                </p>
-                                <div>
-                                    Comments:
-                                    <hr/>
-                                    <ul className='comments'>
-                                    {task.comments.map(comment =>
-                                        {return(
-                                            <li>
-                                                <Comments 
-                                                    userID={comment.user_id} 
-                                                    contents={comment.comment}
-                                                    date={comment.date}
-                                                    />
-                                            </li>
-                                        )}
-                                    )}
-                                    </ul>
-                                </div>
-                            </div>   
-                           )
+                            <Tasks task={task} userList={userList}/>
+                        )
                     }
                 })}
-
             </div>
 
             <p>
