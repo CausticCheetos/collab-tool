@@ -4,6 +4,7 @@
     padding: 5px;
     border-style: solid;
     border-radius: 12px;
+    width: 22em;
 }
 .taskCard > h3{
     margin: 0;
@@ -33,4 +34,11 @@
 .comments{
     list-style-type: none;
     padding: 0;
+}
+
+.tasksList{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    justify-content: center;
 }

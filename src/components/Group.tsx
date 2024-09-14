@@ -2,6 +2,7 @@ import './Group.css'
 import Tasks from './Task.tsx';
 import groupService from '../services/groups.tsx'
 import { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 
 interface GroupProps {
     id: number;
@@ -36,6 +37,7 @@ interface ITask {
 const Group = ({id, name, groupID}: GroupProps) => {
     const [tasks, setTask] = useState<ITask[]>([]);
     const [userList, setUserList] = useState<UsersProps[]>([]);
+    const navigate = useNavigate();
     //const [comments, setComments] = useState<IComments[]>([]);
     
     useEffect(() => {
@@ -159,9 +161,17 @@ const Group = ({id, name, groupID}: GroupProps) => {
                 })
                 }
             </div>
-
             <div>
-                Your task:
+                <button onClick={() => navigate("/newTask", {
+                    state: {
+                        userID: id,
+                        groupID: groupID
+                    }
+                })}>Create New Task</button>
+            </div>
+            Your task:
+            <div className='tasksList'>
+                
                 
                 {tasks.map((task) => {
                     if(task.user_id == id && task.group_id == groupID){
@@ -173,13 +183,17 @@ const Group = ({id, name, groupID}: GroupProps) => {
                 {(()=>{
                     if(tasks.length == 0){
                         return(
-                            <div>You have no tasks! Add one</div>
+                            <div>
+                                <strong>
+                                    You have no tasks! Add one!
+                                </strong>
+                            </div>
                         )
                     }
                 })()}
             </div>
-            <div>
-                Others
+            Other members task: 
+            <div className='tasksList'>
                 {tasks.map((task) => {
                     if(task.user_id != id && task.group_id == groupID){
                         return(

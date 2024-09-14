@@ -91,6 +91,7 @@ const Tasks = ({task, userList} : TaskProps) =>{
                     )}
                 )}
                 </ul>
+                <button>Add Comment</button>
             </div>
         </div>   
         )
