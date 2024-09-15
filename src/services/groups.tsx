@@ -47,6 +47,28 @@ const createTask = (userID: number, groupID: number, taskName: string, descripti
     return axios.request(config);
 }
 
+const createComment = (userID: number, taskID: number, comment: string, rating: number | null) =>{
+    const body = {
+        "userID": userID,
+        "taskID": taskID,
+        "comment": comment,
+        "rating": rating
+    }
+    const json = JSON.stringify(body);
+
+    const config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: `${baseUrl}/tasks/comments/add`,
+        headers: { 
+          'Content-Type': 'application/json'
+        },
+        data : json
+      };
+
+    return axios.request(config);
+}
+
 export default {
     getGroups: getGroups,
     getGroupUserlist: getGroupUserlist,
@@ -54,5 +76,6 @@ export default {
     getGroupUserlistDetails: getGroupUserlistDetails,
     getTaskComments: getTaskComments,
     getAllComments: getAllComments,
-    createTask: createTask
+    createTask: createTask,
+    createComment: createComment
 }

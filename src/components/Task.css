@@ -16,4 +16,14 @@ h3{
     border-bottom: solid;
     padding-bottom: 15px;
     border-width: 1px;
-  }
+}
+
+.commentForm{
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.commentForm>textarea{
+    resize: vertical;
+}

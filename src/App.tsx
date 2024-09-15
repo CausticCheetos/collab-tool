@@ -41,11 +41,6 @@ function App() {
           setUserName(response.data[0]["name"])
           setPersonID(response.data[0]["id"])
       })
-    /* groupService
-      .getGroups(userID)
-      .then((response) => {
-        console.log(response.data);
-      }) */
 
     getGroups();
     
@@ -60,9 +55,6 @@ function App() {
     })
   }
 
-  /* function getUserList(){
-
-  } */
   
   return (
     <>
@@ -73,6 +65,9 @@ function App() {
       <p>
         Hello {userName} your userID is {personID}
       </p>
+      <button>
+        Create a new group
+      </button>
       {groups.map((group) =>{
         console.log(Object.keys(groups).length);
         return(

@@ -1,5 +1,8 @@
+import { useState } from 'react';
 import Comments from  './Comments.tsx'
+import groupService from '../services/groups.tsx'
 import './Task.css'
+import { useNavigate } from 'react-router-dom';
 
 interface IComments {
     task_id: number;
@@ -26,21 +29,42 @@ interface UsersProps {
 }
 
 interface TaskProps {
+    id: number;
     task: ITask;
     userList: UsersProps[];
 }
 
-const Tasks = ({task, userList} : TaskProps) =>{
+const Tasks = ({id, task, userList} : TaskProps) =>{
+    const navigate = useNavigate()
+
     const date = new Date(task.date.replace(' ', 'T'));
     const dateString = date.toDateString();
     const dateTime = date.toLocaleTimeString();
-    console.log(userList);
+    const [isComment, setIsComment] = useState(false);
+    const [isRate, setIsRate] = useState(false);
+    const [comment, setComment] = useState('');
+    const [rating, setRating] = useState("1");
 
     const userName = userList.find((item, key) => {
         if(item.id == task.user_id){
             return userList[key]['name'];
         }
     })
+
+    const handleSubmit = (e: React.FormEvent) =>{
+        e.preventDefault();
+        let ratingScore = null;
+        if(isRate){
+            ratingScore = Number(rating);
+        }
+
+        groupService
+            .createComment(id, task.task_id, comment, ratingScore)
+            .then((response) => {
+                console.log(response.status);
+                navigate(0);
+            })
+    }
 
     return(
         <div className='taskCard'>
@@ -91,7 +115,40 @@ const Tasks = ({task, userList} : TaskProps) =>{
                     )}
                 )}
                 </ul>
-                <button>Add Comment</button>
+                {isComment ? 
+                    <form className='commentForm' onSubmit={handleSubmit}>
+                        <label>Comment</label>
+                        <textarea
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}/>
+                        <div>
+                            Include rating
+                            <input 
+                                type='checkbox'
+                                checked={isRate}
+                                onChange={(e) => setIsRate(e.target.checked)}/>
+                        </div>
+                        <input 
+                            className='slider'
+                            type='range' 
+                            min={0} 
+                            max={2} 
+                            value={rating}
+                            step={0.01}
+                            disabled={!isRate}
+                            onChange={(e) => setRating(e.target.value)}
+                        />
+                        <div>
+                            Rating: {rating} 
+                        </div>
+                        <div>
+                            <button>Submit</button>
+                        </div>
+                    </form>
+                :null}
+                {isComment ? 
+                    <button onClick={() => setIsComment(!isComment)}>Cancel</button>:
+                    <button onClick={() => setIsComment(!isComment)}>Add Comment</button>}
             </div>
         </div>   
         )
