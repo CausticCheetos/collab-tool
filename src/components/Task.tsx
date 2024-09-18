@@ -44,6 +44,22 @@ const Tasks = ({id, task, userList} : TaskProps) =>{
     const [isRate, setIsRate] = useState(false);
     const [comment, setComment] = useState('');
     const [rating, setRating] = useState("1");
+    
+    const calculateRating = () =>{
+        let average = 0;
+        let total = 0;
+        let result = 0;
+        task.comments.forEach(item => {
+            if(item.rating){
+                total++;
+                result += item.rating;
+            }
+        })
+        average = result/total;
+        console.log(average);
+        
+        return(average)
+    }
 
     const userName = userList.find((item, key) => {
         if(item.id == task.user_id){
@@ -87,9 +103,16 @@ const Tasks = ({id, task, userList} : TaskProps) =>{
                 <span>
                     Created on {dateString} - {dateTime}
                 </span>
-                <span>
-                    TaskID {task.task_id}
-                </span>
+                <div style={{display: "flex", justifyContent:"space-between"}}>
+                    <span>
+                        Task ID <strong>{task.task_id}</strong>
+                    </span>
+                    <span>
+                        {calculateRating() ? "Average rating: " + calculateRating() : "No Ratings"}
+                    </span>
+
+                </div>
+                
             </div>
             <h4>
                 Description
@@ -98,7 +121,9 @@ const Tasks = ({id, task, userList} : TaskProps) =>{
                 {task.description}
             </p>
             <div>
-                Comments:
+                <h4 style={{margin: "0"}}>
+                    Comments
+                </h4> 
                 <hr/>
                 <ul className='comments'>
                 {task.comments.map(comment =>

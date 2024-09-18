@@ -3,6 +3,7 @@ import './App.css'
 import userService from './services/users.tsx'
 /* import groupService from './services/groups.tsx' */
 import Group from  './components/Group.tsx'
+import { useNavigate } from 'react-router-dom';
 
 interface groupsProps {
   group_id: number;
@@ -15,10 +16,12 @@ interface groupsProps {
 }
 
 function App() {
+  const navigate = useNavigate();
   const [userName, setUserName] = useState<string>('')
   const [personID, setPersonID] = useState<number>(0);
   const [groups, setGroups] = useState<groupsProps[]>([]);
 
+  //Change users
   const userID:number = 1;
 
   /* const groups = [
@@ -65,7 +68,12 @@ function App() {
       <p>
         Hello {userName} your userID is {personID}
       </p>
-      <button>
+      <button 
+        onClick={() => navigate("/newGroup", {
+                    state: {
+                        userID: userID
+                    }})
+                }>
         Create a new group
       </button>
       {groups.map((group) =>{

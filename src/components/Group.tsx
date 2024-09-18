@@ -138,7 +138,7 @@ const Group = ({id, name, groupID}: GroupProps) => {
     ] */
 
     return(
-        <div>
+        <div style={{marginLeft: "1em", marginRight: "1em"}}>
             <div className='group'>
                 <div className='groupDetails'>
                     <h1>
@@ -174,8 +174,6 @@ const Group = ({id, name, groupID}: GroupProps) => {
             </div>
             Your task:
             <div className='tasksList'>
-                
-                
                 {tasks.map((task) => {
                     if(task.user_id == id && task.group_id == groupID){
                         return(

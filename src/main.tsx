@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import CreateTask from './components/CreateTask.tsx'
+import CreateGroup from './components/CreateGroup.tsx'
 import './index.css'
 import {
   createBrowserRouter,
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
   {
     path: "/newTask",
     element: <CreateTask/>
+  },
+  {
+    path: "/newGroup",
+    element: <CreateGroup/>
   }
 ]);
 

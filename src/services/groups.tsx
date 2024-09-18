@@ -25,6 +25,28 @@ const getAllComments = (tasks: string) =>{
     return axios.get(`http://localhost:3001/api/comments?tasks=${tasks}`)
 }
 
+const createGroup = (groupName: string, courseID: number, userID: number) =>{
+    const body = {
+        "groupName": groupName,
+        "courseID": courseID,
+        "userID": userID
+    }
+
+    const json = JSON.stringify(body);
+
+    const config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: `${baseUrl}/create`,
+        headers: { 
+          'Content-Type': 'application/json'
+        },
+        data : json
+      };
+
+    return axios.request(config);
+}
+
 const createTask = (userID: number, groupID: number, taskName: string, description: string) =>{
     const body = {
         "userID": userID,
@@ -77,5 +99,6 @@ export default {
     getTaskComments: getTaskComments,
     getAllComments: getAllComments,
     createTask: createTask,
-    createComment: createComment
+    createComment: createComment,
+    createGroup: createGroup
 }
