@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import userService from './services/users.tsx'
+import statusService from './services/status.tsx'
 /* import groupService from './services/groups.tsx' */
 import Group from  './components/Group.tsx'
 import { useNavigate } from 'react-router-dom';
@@ -20,6 +21,7 @@ function App() {
   const [userName, setUserName] = useState<string>('')
   const [personID, setPersonID] = useState<number>(0);
   const [groups, setGroups] = useState<groupsProps[]>([]);
+  const [statusList, setStatusList] = useState([]);
 
   //Change users
   const userID:number = 1;
@@ -40,10 +42,16 @@ function App() {
     userService
       .getUser(userID)
       .then((response) => {
-          console.log(response.data);
           setUserName(response.data[0]["name"])
           setPersonID(response.data[0]["id"])
       })
+    
+    statusService
+      .getStatusList()
+      .then((response) =>{
+        console.log(response.data);
+        setStatusList(response.data);
+    })
 
     getGroups();
     
@@ -77,9 +85,9 @@ function App() {
         Create a new group
       </button>
       {groups.map((group) =>{
-        console.log(Object.keys(groups).length);
+        /* console.log(Object.keys(groups).length); */
         return(
-          <Group id={personID} name={group['group_name']} groupID={group['group_id']}/>
+          <Group id={personID} name={group['group_name']} groupID={group['group_id']} statusList={statusList}/>
         )
       })}
     </>

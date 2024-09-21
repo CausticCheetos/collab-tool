@@ -13,6 +13,11 @@ interface IComments {
     date: string;
 }
 
+interface IStatuses{
+    status_id: number;
+    status: string;
+}
+
 interface ITask {
     group_id: number;
     task_id: number;
@@ -20,6 +25,7 @@ interface ITask {
     user_id: number;
     description: string;
     date: string;
+    status: number;
     comments: IComments[];
 }
 
@@ -32,10 +38,11 @@ interface TaskProps {
     id: number;
     task: ITask;
     userList: UsersProps[];
+    statusList: IStatuses[];
 }
 
-const Tasks = ({id, task, userList} : TaskProps) =>{
-    const navigate = useNavigate()
+const Tasks = ({id, task, userList, statusList} : TaskProps) =>{
+    const navigate = useNavigate();
 
     const date = new Date(task.date.replace(' ', 'T'));
     const dateString = date.toDateString();
@@ -45,6 +52,14 @@ const Tasks = ({id, task, userList} : TaskProps) =>{
     const [comment, setComment] = useState('');
     const [rating, setRating] = useState("1");
     
+    const getStatus = () => {
+        const result = statusList.find((element) =>{
+            return element.status_id == task.status
+        })
+        
+        return result?.status;
+    }
+
     const calculateRating = () =>{
         let average = 0;
         let total = 0;
@@ -55,9 +70,7 @@ const Tasks = ({id, task, userList} : TaskProps) =>{
                 result += item.rating;
             }
         })
-        average = result/total;
-        console.log(average);
-        
+        average = result/total;        
         return(average)
     }
 
@@ -100,9 +113,16 @@ const Tasks = ({id, task, userList} : TaskProps) =>{
             </div>
             
             <div className='taskDetails'>
-                <span>
-                    Created on {dateString} - {dateTime}
-                </span>
+                
+                <div style={{display: "flex", justifyContent:"space-between"}}>
+                    <span>
+                        Created on {dateString} - {dateTime}
+                    </span>
+                    <span>
+                        Status: {getStatus()}
+                    </span>
+                </div>
+
                 <div style={{display: "flex", justifyContent:"space-between"}}>
                     <span>
                         Task ID <strong>{task.task_id}</strong>
@@ -110,9 +130,7 @@ const Tasks = ({id, task, userList} : TaskProps) =>{
                     <span>
                         {calculateRating() ? "Average rating: " + calculateRating() : "No Ratings"}
                     </span>
-
                 </div>
-                
             </div>
             <h4>
                 Description

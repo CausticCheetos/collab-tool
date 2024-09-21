@@ -8,11 +8,17 @@ interface GroupProps {
     id: number;
     name: string;
     groupID: number;
+    statusList: IStatuses[];
 }
 
 interface UsersProps {
     id: number;
     name: string;
+}
+
+interface IStatuses{
+    status_id: number;
+    status: string;
 }
 
 interface IComments {
@@ -31,10 +37,11 @@ interface ITask {
     user_id: number;
     description: string;
     date: string;
+    status: number;
     comments: IComments[];
 }
 
-const Group = ({id, name, groupID}: GroupProps) => {
+const Group = ({id, name, groupID, statusList}: GroupProps) => {
     const [tasks, setTask] = useState<ITask[]>([]);
     const [userList, setUserList] = useState<UsersProps[]>([]);
     const navigate = useNavigate();
@@ -177,7 +184,7 @@ const Group = ({id, name, groupID}: GroupProps) => {
                 {tasks.map((task) => {
                     if(task.user_id == id && task.group_id == groupID){
                         return(
-                            <Tasks id={id} task={task} userList={userList}/>
+                            <Tasks id={id} task={task} userList={userList} statusList={statusList}/>
                         )
                     }
                 })}
@@ -198,7 +205,7 @@ const Group = ({id, name, groupID}: GroupProps) => {
                 {tasks.map((task) => {
                     if(task.user_id != id && task.group_id == groupID){
                         return(
-                            <Tasks id={id} task={task} userList={userList}/>
+                            <Tasks id={id} task={task} userList={userList} statusList={statusList}/>
                         )
                     }
                 })}
