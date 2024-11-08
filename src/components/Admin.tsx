@@ -2,6 +2,7 @@ import Header from './Header.tsx'
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import userService from '../services/users.tsx'
+import groupService from '../services/groups.tsx'
 
 interface UsersProps {
     id: number;
@@ -10,7 +11,9 @@ interface UsersProps {
 }
 
 const Admin = () => {
+    const navigate = useNavigate();
     const location = useLocation();
+    const name = location.state.groupName;
     const groupID = location.state.groupID;
     const userList = location.state.userList;
 
@@ -25,11 +28,32 @@ const Admin = () => {
             .addUserGroup(Number(newUser), groupID)
             .then((res) =>{
                 console.log(res);
+                navigate("/");
             }).catch((error) =>{
                 if(error.response){
                     console.log(error.response.data);
                 }
             })
+            
+    }
+
+    const handleRemoveUser = (userID:number) => {
+        console.log(userID);
+        groupService.removeUserGroup(groupID, userID).then((res) => {
+            console.log(res);
+            navigate("/");
+        }).catch((error) => {
+            console.log(error.response.data);
+        })
+    }
+
+    const handleUpdate = () => {
+        groupService.updateGroup(groupID, groupName, courseID).then((res) => {
+            console.log(res);
+            navigate("/");
+        }).catch((error) => {
+            console.log(error.response.data);
+        })
     }
 
     return(
@@ -37,7 +61,7 @@ const Admin = () => {
             <Header/>
             <div style={{padding: "0 50px"}}>
             <h1>            
-                Admin View for {groupName}
+                Admin View for {name}
             </h1>
             
             <div style={{display: 'flex', justifyContent: 'space-between'}}>
@@ -65,7 +89,9 @@ const Admin = () => {
                                                 justifyContent: 'space-between', 
                                                 alignItems: 'center'}}>
                                             <span style={{fontSize: '1.8em'}}>{user.name} ({user.id})</span>
-                                            <button>Remove</button>
+                                            <button
+                                                onClick={() => handleRemoveUser(user.id)}
+                                                >Remove</button>
                                         </div> 
                                     </li>
                                 )
@@ -73,17 +99,26 @@ const Admin = () => {
                         })}
                     </ul>
                 </div>
-
-                <div style={{display: 'flex', flexDirection: 'column'}}>
+                
+                <div>
                     <h2>Edit Details</h2>
-                    <label>Group Name</label>
-                    <input value={groupName}></input>
-                    <label>Course ID</label>
-                    <input value={courseID}></input>
-                    <button 
-                        style={{marginTop: '10px'}}>
-                        Update
-                    </button>
+                    <div style={{display: 'flex', flexDirection: 'column'}}>
+                        
+                        <label>Group Name</label>
+                        <input 
+                            onChange={(e) => {setName(e.target.value)}}
+                            value={groupName}></input>
+                        <label>Course ID</label>
+                        <input 
+                            type='number'
+                            onChange={(e) => {setCourseID(e.target.value)}}
+                            value={courseID}></input>
+                        <button 
+                            onClick={handleUpdate}
+                            style={{marginTop: '10px'}}>
+                            Update
+                        </button>
+                    </div>
                 </div>
             </div>
             </div>

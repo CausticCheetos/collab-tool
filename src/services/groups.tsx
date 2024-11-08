@@ -104,6 +104,25 @@ const removeUserGroup = (groupID: number, userID: number) =>{
     return axios.request(config);
 }
 
+const updateGroup = (groupID: number, groupName: string, courseID: number) => {
+    const data = JSON.stringify({
+        "groupName": groupName,
+        "courseID": courseID
+    });
+
+    const config = {
+    method: 'patch',
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/${groupID}/update`,
+    headers: { 
+        'Content-Type': 'application/json'
+    },
+    data : data
+    };
+
+    return axios.request(config);
+}
+
 export default {
     getGroups: getGroups,
     getGroupUserlist: getGroupUserlist,
@@ -114,5 +133,6 @@ export default {
     createTask: createTask,
     createComment: createComment,
     createGroup: createGroup,
-    removeUserGroup: removeUserGroup
+    removeUserGroup: removeUserGroup,
+    updateGroup: updateGroup
 }
