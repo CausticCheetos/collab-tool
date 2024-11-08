@@ -1,4 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import Header from './Header.tsx'
 import groupService from '../services/groups.tsx'
 import { useState } from "react";
 
@@ -27,16 +28,24 @@ const CreateTask = () => {
     }
 
     return(
-        <>
-            Create task here! {userID} from group {groupID}
-            <form onSubmit={onSubmit}>
-                <label>Task Name</label>
-                <input value={taskName} onChange={(e) => { setTaskName(e.target.value) }}/>
-                <label>Description</label>
-                <input value={description} onChange={(e) => { setDescription(e.target.value) }}/>
-                <button>Submit</button>
-            </form>
-        </>
+        <div style={{width: '800px'}}> 
+            <Header/>
+            <h1>            
+                Create New Task 
+            </h1>
+            <span>
+                User <strong> {userID} </strong> from group <strong>{groupID}</strong>
+            </span>
+            <div style={{display: "flex", justifyContent: 'center'}}>
+                <form onSubmit={onSubmit} style={{display: "flex", flexDirection: "column", rowGap: "10px"}}>
+                    <label>Task Name</label>
+                    <input value={taskName} onChange={(e) => { setTaskName(e.target.value) }}/>
+                    <label>Description</label>
+                    <textarea value={description} onChange={(e) => { setDescription(e.target.value) }}/>
+                    <button>Submit</button>
+                </form>
+            </div>
+        </div>
     )
 }
 

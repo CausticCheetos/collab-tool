@@ -1,4 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import Header from './Header.tsx'
 import groupService from '../services/groups.tsx'
 import { useState } from "react";
 
@@ -26,16 +27,21 @@ const CreateGroup = () => {
     }
 
     return(
-        <>
-            Create new group here!
-            <form onSubmit={onSubmit} style={{display: "flex", flexDirection: "column"}}>
-                <label>Group Name</label>
-                <input value={groupName} onChange={(e) => { setGroupName(e.target.value) }}/>
-                <label>Course ID</label>
-                <input value={courseID} onChange={(e) => { setCourseID(e.target.value) }}/>
-                <button>Submit</button>
-            </form>
-        </>
+        <div style={{width: '800px'}}>
+            <Header/>
+            <h1>
+                Create New Group
+            </h1>
+            <div style={{display: 'flex', justifyContent: 'center'}}>
+                <form onSubmit={onSubmit} style={{display: "flex", flexDirection: "column", rowGap: "10px"}}>
+                    <label>Group Name</label>
+                    <input value={groupName} onChange={(e) => { setGroupName(e.target.value) }}/>
+                    <label>Course ID</label>
+                    <input value={courseID} onChange={(e) => { setCourseID(e.target.value) }}/>
+                    <button>Submit</button>
+                </form>
+            </div>
+        </div>
     )
 }
 

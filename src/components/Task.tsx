@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Comments from  './Comments.tsx'
 import groupService from '../services/groups.tsx'
+import statusService from '../services/status.tsx'
 import './Task.css'
 import { useNavigate } from 'react-router-dom';
 
@@ -39,9 +40,10 @@ interface TaskProps {
     task: ITask;
     userList: UsersProps[];
     statusList: IStatuses[];
+    isUser: boolean;
 }
 
-const Tasks = ({id, task, userList, statusList} : TaskProps) =>{
+const Tasks = ({id, task, userList, statusList, isUser} : TaskProps) =>{
     const navigate = useNavigate();
 
     const date = new Date(task.date.replace(' ', 'T'));
@@ -51,6 +53,7 @@ const Tasks = ({id, task, userList, statusList} : TaskProps) =>{
     const [isRate, setIsRate] = useState(false);
     const [comment, setComment] = useState('');
     const [rating, setRating] = useState("1");
+    const [status, setStatus] = useState(0);
     
     const getStatus = () => {
         const result = statusList.find((element) =>{
@@ -95,6 +98,18 @@ const Tasks = ({id, task, userList, statusList} : TaskProps) =>{
             })
     }
 
+    const handleUpdate = () => {
+        console.log(status);
+        console.log(task.task_id);
+        
+        statusService
+            .updateStatus(status, task.task_id)
+            .then((response) => {
+                console.log(response.status);
+                navigate(0);
+            })
+    }
+
     return(
         <div className='taskCard'>
             <div>
@@ -107,19 +122,48 @@ const Tasks = ({id, task, userList, statusList} : TaskProps) =>{
                         {userName?.name}
                     </strong>
                 </div>
-                <h3>
-                    {task.task_name}
-                </h3>
+                <div style={{display: "flex", justifyContent: "space-between", paddingBottom: "5px"}}>
+                    <h3>
+                        {task.task_name}
+                    </h3>
+                    {isUser ? 
+                        <div>
+                            <select onChange={(e) => setStatus(Number(e.target.value))}>
+                                {statusList.map((element) =>{
+                                    if(getStatus() == element.status){
+                                        return(
+                                            <option selected value={element.status_id}>
+                                                {element.status}
+                                            </option>
+                                        )
+                                    }else{
+                                        return(
+                                            <option value={element.status_id}>
+                                                {element.status}
+                                            </option>
+                                        )
+                                    }
+                                })}
+                            </select>
+                            <button 
+                                disabled={status == 0 ? true : false}
+                                onClick={() => handleUpdate()}
+                                style={{fontSize: "0.7em", padding: "4px"}}>
+                                Update
+                            </button>
+                        </div>:
+                        null}
+                    
+                </div>
             </div>
             
             <div className='taskDetails'>
-                
-                <div style={{display: "flex", justifyContent:"space-between"}}>
+                <div style={{display: "flex", justifyContent:"space-between", gap: '10px'}}>
                     <span>
                         Created on {dateString} - {dateTime}
                     </span>
                     <span>
-                        Status: {getStatus()}
+                        Status: <strong>{getStatus()}</strong>
                     </span>
                 </div>
 
@@ -162,8 +206,9 @@ const Tasks = ({id, task, userList, statusList} : TaskProps) =>{
                     <form className='commentForm' onSubmit={handleSubmit}>
                         <label>Comment</label>
                         <textarea
-                        value={comment}
-                        onChange={(e) => setComment(e.target.value)}/>
+                            placeholder='Enter Comment'
+                            value={comment}
+                            onChange={(e) => setComment(e.target.value)}/>
                         <div>
                             Include rating
                             <input 
@@ -185,7 +230,7 @@ const Tasks = ({id, task, userList, statusList} : TaskProps) =>{
                             Rating: {rating} 
                         </div>
                         <div>
-                            <button>Submit</button>
+                            <button disabled={comment ? false : true}>Submit</button>
                         </div>
                     </form>
                 :null}

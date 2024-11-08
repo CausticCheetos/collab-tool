@@ -13,8 +13,22 @@ const getUserGroupsDetails = (userID: number) => {
     return axios.get(`${baseUrl}/${userID}/groups`)
 }
 
+const addUserGroup = (userID: number, groupID: number) => {
+    const config = {
+    method: 'post',
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/${userID}/join/${groupID}`,
+    headers: { 
+        'Content-Type': 'application/json'
+    }
+    };
+
+    return axios.request(config);
+}
+
 export default {
     getAll: getAll,
     getUser: getUser,
-    getUserGroupsDetails: getUserGroupsDetails
+    getUserGroupsDetails: getUserGroupsDetails,
+    addUserGroup:addUserGroup
 }

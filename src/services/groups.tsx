@@ -91,6 +91,19 @@ const createComment = (userID: number, taskID: number, comment: string, rating: 
     return axios.request(config);
 }
 
+const removeUserGroup = (groupID: number, userID: number) =>{
+    const config = {
+    method: 'delete',
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/${groupID}/user/${userID}`,
+    headers: { 
+        'Content-Type': 'application/json'
+    }
+    };
+
+    return axios.request(config);
+}
+
 export default {
     getGroups: getGroups,
     getGroupUserlist: getGroupUserlist,
@@ -100,5 +113,6 @@ export default {
     getAllComments: getAllComments,
     createTask: createTask,
     createComment: createComment,
-    createGroup: createGroup
+    createGroup: createGroup,
+    removeUserGroup: removeUserGroup
 }

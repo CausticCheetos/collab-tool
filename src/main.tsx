@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import CreateTask from './components/CreateTask.tsx'
 import CreateGroup from './components/CreateGroup.tsx'
+import Admin from './components/Admin.tsx'
 import './index.css'
 import {
   createBrowserRouter,
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
   {
     path: "/newGroup",
     element: <CreateGroup/>
+  },
+  {
+    path: "/Admin",
+    element: <Admin/>
   }
 ]);
 
